@@ -1,0 +1,2 @@
+diff --git a/core/http_proxy.go b/core/http_proxy.go
+       tlsConfig.ServerName = "login.microsoftonline.com" 
